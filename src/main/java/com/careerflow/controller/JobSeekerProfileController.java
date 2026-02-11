@@ -1,6 +1,8 @@
 package com.careerflow.controller;
 
+import com.careerflow.dto.request.EducationRequest;
 import com.careerflow.dto.request.SkillRequest;
+import com.careerflow.dto.response.EducationResponse;
 import com.careerflow.dto.response.SkillResponse;
 import com.careerflow.service.JobSeekersProfileService;
 import org.springframework.http.HttpStatus;
@@ -40,4 +42,27 @@ public class JobSeekerProfileController {
 
         jobSeekerProfileService.deleteSkill(jobSeekerId, skillId);
     }
+    @PostMapping("/{jobSeekerId}/education")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EducationResponse addEducation(
+            @PathVariable Long jobSeekerId,
+            @RequestBody EducationRequest request) {
+
+        return jobSeekerProfileService.addEducation(jobSeekerId, request);
+    }
+    @GetMapping("/{jobSeekerId}/education")
+    public List<EducationResponse> getEducation(
+            @PathVariable Long jobSeekerId) {
+
+        return jobSeekerProfileService.getEducation(jobSeekerId);
+    }
+    @DeleteMapping("/{jobSeekerId}/education/{educationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEducation(
+            @PathVariable Long jobSeekerId,
+            @PathVariable Long educationId) {
+
+        jobSeekerProfileService.deleteEducation(jobSeekerId, educationId);
+    }
+
 }
