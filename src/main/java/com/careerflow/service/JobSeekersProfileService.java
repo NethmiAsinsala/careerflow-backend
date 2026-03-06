@@ -17,9 +17,13 @@ public interface JobSeekersProfileService {
 
     List<SkillResponse> getSkills(Long jobSeekerId);
 
+    SkillResponse updateSkill(Long jobSeekerId, Long skillId, SkillRequest request);
+
     void deleteSkill(Long jobSeekerId, Long skillId);
 
     EducationResponse addEducation(Long jobSeekerId, EducationRequest request);
+
+    EducationResponse updateEducation( Long jobSeekerId, Long educationId, EducationRequest request);
 
     List<EducationResponse> getEducation(Long jobSeekerId);
 

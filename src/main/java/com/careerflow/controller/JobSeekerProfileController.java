@@ -32,6 +32,17 @@ public class JobSeekerProfileController {
 
         return jobSeekerProfileService.addSkill(jobSeekerId, request);
     }
+    @PutMapping("/{jobSeekerId}/skills/{skillId}")
+    public SkillResponse updateSkill(
+            @PathVariable Long jobSeekerId,
+            @PathVariable Long skillId,
+            @RequestBody SkillRequest request) {
+
+        return jobSeekerProfileService.updateSkill(
+                jobSeekerId,
+                skillId,
+                request);
+    }
     @GetMapping("/{jobSeekerId}/skills")
     public List<SkillResponse> getSkills(
             @PathVariable Long jobSeekerId) {
@@ -53,6 +64,17 @@ public class JobSeekerProfileController {
             @RequestBody EducationRequest request) {
 
         return jobSeekerProfileService.addEducation(jobSeekerId, request);
+    }
+    @PutMapping("/{jobSeekerId}/education/{educationId}")
+    public EducationResponse updateEducation(
+            @PathVariable Long jobSeekerId,
+            @PathVariable Long educationId,
+            @RequestBody EducationRequest request) {
+
+        return jobSeekerProfileService.updateEducation(
+                jobSeekerId,
+                educationId,
+                request);
     }
     @GetMapping("/{jobSeekerId}/education")
     public List<EducationResponse> getEducation(

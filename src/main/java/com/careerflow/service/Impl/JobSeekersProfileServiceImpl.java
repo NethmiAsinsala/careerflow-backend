@@ -59,6 +59,25 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
 
         return mapper.toSkillResponse(skillRepository.save(skill));
     }
+    @Override
+    public SkillResponse updateSkill(
+            Long jobSeekerId,
+            Long skillId,
+            SkillRequest request) {
+
+        getJobSeeker(jobSeekerId);
+
+        Skill skill = skillRepository.findById(skillId)
+                .orElseThrow(() -> new RuntimeException("Skill not found"));
+
+        if (!skill.getJobSeeker().getId().equals(jobSeekerId)) {
+            throw new RuntimeException("Skill does not belong to this job seeker");
+        }
+
+        skill.setName(request.getName());
+
+        return mapper.toSkillResponse(skillRepository.save(skill));
+    }
 
     @Override
     public List<SkillResponse> getSkills(Long jobSeekerId) {
@@ -93,6 +112,31 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         education.setJobSeeker(jobSeeker);
 
         return mapper.toEducationResponse(educationRepository.save(education));
+    }
+    @Override
+    public EducationResponse updateEducation(
+            Long jobSeekerId,
+            Long educationId,
+            EducationRequest request) {
+
+        getJobSeeker(jobSeekerId);
+
+        Education education = educationRepository.findById(educationId)
+                .orElseThrow(() -> new RuntimeException("Education not found"));
+
+        if (!education.getJobSeeker().getId().equals(jobSeekerId)) {
+            throw new RuntimeException("Education does not belong to this job seeker");
+        }
+
+        education.setInstitution(request.getInstitution());
+        education.setDegree(request.getDegree());
+        education.setFieldOfStudy(request.getFieldOfStudy());
+        education.setStartDate(request.getStartDate());
+        education.setEndDate(request.getEndDate());
+        education.setDescription(request.getDescription());
+
+        return mapper.toEducationResponse(
+                educationRepository.save(education));
     }
 
     @Override
