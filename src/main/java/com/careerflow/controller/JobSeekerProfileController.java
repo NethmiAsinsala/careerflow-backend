@@ -2,9 +2,11 @@ package com.careerflow.controller;
 
 import com.careerflow.dto.request.EducationRequest;
 import com.careerflow.dto.request.ExperienceRequest;
+import com.careerflow.dto.request.ProjectRequest;
 import com.careerflow.dto.request.SkillRequest;
 import com.careerflow.dto.response.EducationResponse;
 import com.careerflow.dto.response.ExperienceResponse;
+import com.careerflow.dto.response.ProjectResponse;
 import com.careerflow.dto.response.SkillResponse;
 import com.careerflow.service.JobSeekersProfileService;
 import org.springframework.http.HttpStatus;
@@ -87,6 +89,28 @@ public class JobSeekerProfileController {
             @PathVariable Long experienceId) {
 
         jobSeekerProfileService.deleteExperience(jobSeekerId, experienceId);
+    }
+    @PostMapping("/{jobSeekerId}/projects")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProjectResponse addProject(
+            @PathVariable Long jobSeekerId,
+            @RequestBody ProjectRequest request) {
+
+        return jobSeekerProfileService.addProject(jobSeekerId, request);
+    }
+    @GetMapping("/{jobSeekerId}/projects")
+    public List<ProjectResponse> getProjects(
+            @PathVariable Long jobSeekerId) {
+
+        return jobSeekerProfileService.getProjects(jobSeekerId);
+    }
+    @DeleteMapping("/{jobSeekerId}/projects/{projectId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProject(
+            @PathVariable Long jobSeekerId,
+            @PathVariable Long projectId) {
+
+        jobSeekerProfileService.deleteProject(jobSeekerId, projectId);
     }
 
 }
