@@ -98,6 +98,17 @@ public class JobSeekerProfileController {
 
         return jobSeekerProfileService.addExperience(jobSeekerId, request);
     }
+    @PutMapping("/{jobSeekerId}/experience/{experienceId}")
+    public ExperienceResponse updateExperience(
+            @PathVariable Long jobSeekerId,
+            @PathVariable Long experienceId,
+            @RequestBody ExperienceRequest request) {
+
+        return jobSeekerProfileService.updateExperience(
+                jobSeekerId,
+                experienceId,
+                request);
+    }
     @GetMapping("/{jobSeekerId}/experience")
     public List<ExperienceResponse> getExperience(
             @PathVariable Long jobSeekerId) {

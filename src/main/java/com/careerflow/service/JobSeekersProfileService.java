@@ -31,6 +31,8 @@ public interface JobSeekersProfileService {
 
     ExperienceResponse addExperience(Long jobSeekerId, ExperienceRequest request);
 
+    ExperienceResponse updateExperience( Long jobSeekerId, Long experienceId, ExperienceRequest request);
+
     List<ExperienceResponse> getExperience(Long jobSeekerId);
 
     void deleteExperience(Long jobSeekerId, Long experienceId);

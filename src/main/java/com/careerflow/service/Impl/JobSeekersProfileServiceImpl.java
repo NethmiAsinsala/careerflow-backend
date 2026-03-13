@@ -173,6 +173,30 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
 
         return mapper.toExperienceResponse(experienceRepository.save(experience));
     }
+    @Override
+    public ExperienceResponse updateExperience(
+            Long jobSeekerId,
+            Long experienceId,
+            ExperienceRequest request) {
+
+        getJobSeeker(jobSeekerId);
+
+        Experience experience = experienceRepository.findById(experienceId)
+                .orElseThrow(() -> new RuntimeException("Experience not found"));
+
+        if (!experience.getJobSeeker().getId().equals(jobSeekerId)) {
+            throw new RuntimeException("Experience does not belong to this job seeker");
+        }
+
+        experience.setCompanyName(request.getCompanyName());
+        experience.setJobTitle(request.getJobTitle());
+        experience.setStartDate(request.getStartDate());
+        experience.setEndDate(request.getEndDate());
+        experience.setDescription(request.getDescription());
+
+        return mapper.toExperienceResponse(
+                experienceRepository.save(experience));
+    }
 
     @Override
     public List<ExperienceResponse> getExperience(Long jobSeekerId) {
