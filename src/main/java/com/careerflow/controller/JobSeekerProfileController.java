@@ -20,130 +20,97 @@ public class JobSeekerProfileController {
 
     private final JobSeekersProfileService jobSeekerProfileService;
 
-    public JobSeekerProfileController(
-            JobSeekersProfileService jobSeekerProfileService) {
+    public JobSeekerProfileController( JobSeekersProfileService jobSeekerProfileService) {
         this.jobSeekerProfileService = jobSeekerProfileService;
     }
+
     @PostMapping("/{jobSeekerId}/skills")
     @ResponseStatus(HttpStatus.CREATED)
-    public SkillResponse addSkill(
-            @PathVariable Long jobSeekerId,
-            @RequestBody SkillRequest request) {
-
+    public SkillResponse addSkill( @PathVariable Long jobSeekerId, @RequestBody SkillRequest request) {
         return jobSeekerProfileService.addSkill(jobSeekerId, request);
     }
+
     @PutMapping("/{jobSeekerId}/skills/{skillId}")
-    public SkillResponse updateSkill(
-            @PathVariable Long jobSeekerId,
-            @PathVariable Long skillId,
-            @RequestBody SkillRequest request) {
-
-        return jobSeekerProfileService.updateSkill(
-                jobSeekerId,
-                skillId,
-                request);
+    public SkillResponse updateSkill( @PathVariable Long jobSeekerId, @PathVariable Long skillId, @RequestBody SkillRequest request) {
+        return jobSeekerProfileService.updateSkill(jobSeekerId, skillId, request);
     }
-    @GetMapping("/{jobSeekerId}/skills")
-    public List<SkillResponse> getSkills(
-            @PathVariable Long jobSeekerId) {
 
+    @GetMapping("/{jobSeekerId}/skills")
+    public List<SkillResponse> getSkills( @PathVariable Long jobSeekerId) {
         return jobSeekerProfileService.getSkills(jobSeekerId);
     }
+
     @DeleteMapping("/{jobSeekerId}/skills/{skillId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSkill(
-            @PathVariable Long jobSeekerId,
-            @PathVariable Long skillId) {
-
+    public void deleteSkill( @PathVariable Long jobSeekerId, @PathVariable Long skillId) {
         jobSeekerProfileService.deleteSkill(jobSeekerId, skillId);
     }
+
     @PostMapping("/{jobSeekerId}/education")
     @ResponseStatus(HttpStatus.CREATED)
-    public EducationResponse addEducation(
-            @PathVariable Long jobSeekerId,
-            @RequestBody EducationRequest request) {
-
+    public EducationResponse addEducation(@PathVariable Long jobSeekerId, @RequestBody EducationRequest request) {
         return jobSeekerProfileService.addEducation(jobSeekerId, request);
     }
+
     @PutMapping("/{jobSeekerId}/education/{educationId}")
-    public EducationResponse updateEducation(
-            @PathVariable Long jobSeekerId,
-            @PathVariable Long educationId,
-            @RequestBody EducationRequest request) {
-
-        return jobSeekerProfileService.updateEducation(
-                jobSeekerId,
-                educationId,
-                request);
+    public EducationResponse updateEducation( @PathVariable Long jobSeekerId, @PathVariable Long educationId, @RequestBody EducationRequest request) {
+        return jobSeekerProfileService.updateEducation(jobSeekerId, educationId, request);
     }
-    @GetMapping("/{jobSeekerId}/education")
-    public List<EducationResponse> getEducation(
-            @PathVariable Long jobSeekerId) {
 
+    @GetMapping("/{jobSeekerId}/education")
+    public List<EducationResponse> getEducation( @PathVariable Long jobSeekerId) {
         return jobSeekerProfileService.getEducation(jobSeekerId);
     }
+
     @DeleteMapping("/{jobSeekerId}/education/{educationId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteEducation(
-            @PathVariable Long jobSeekerId,
-            @PathVariable Long educationId) {
-
+    public void deleteEducation(@PathVariable Long jobSeekerId, @PathVariable Long educationId) {
         jobSeekerProfileService.deleteEducation(jobSeekerId, educationId);
     }
+
     @PostMapping("/{jobSeekerId}/experience")
     @ResponseStatus(HttpStatus.CREATED)
-    public ExperienceResponse addExperience(
-            @PathVariable Long jobSeekerId,
-            @RequestBody ExperienceRequest request) {
-
+    public ExperienceResponse addExperience( @PathVariable Long jobSeekerId, @RequestBody ExperienceRequest request) {
         return jobSeekerProfileService.addExperience(jobSeekerId, request);
     }
+
     @PutMapping("/{jobSeekerId}/experience/{experienceId}")
-    public ExperienceResponse updateExperience(
-            @PathVariable Long jobSeekerId,
-            @PathVariable Long experienceId,
-            @RequestBody ExperienceRequest request) {
-
-        return jobSeekerProfileService.updateExperience(
-                jobSeekerId,
-                experienceId,
-                request);
+    public ExperienceResponse updateExperience(@PathVariable Long jobSeekerId, @PathVariable Long experienceId, @RequestBody ExperienceRequest request) {
+        return jobSeekerProfileService.updateExperience(jobSeekerId, experienceId, request);
     }
-    @GetMapping("/{jobSeekerId}/experience")
-    public List<ExperienceResponse> getExperience(
-            @PathVariable Long jobSeekerId) {
 
+    @GetMapping("/{jobSeekerId}/experience")
+    public List<ExperienceResponse> getExperience(@PathVariable Long jobSeekerId) {
         return jobSeekerProfileService.getExperience(jobSeekerId);
     }
+
     @DeleteMapping("/{jobSeekerId}/experience/{experienceId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteExperience(
-            @PathVariable Long jobSeekerId,
-            @PathVariable Long experienceId) {
-
+    public void deleteExperience(@PathVariable Long jobSeekerId, @PathVariable Long experienceId) {
         jobSeekerProfileService.deleteExperience(jobSeekerId, experienceId);
     }
+
     @PostMapping("/{jobSeekerId}/projects")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProjectResponse addProject(
-            @PathVariable Long jobSeekerId,
-            @RequestBody ProjectRequest request) {
-
+    public ProjectResponse addProject(@PathVariable Long jobSeekerId, @RequestBody ProjectRequest request) {
         return jobSeekerProfileService.addProject(jobSeekerId, request);
     }
-    @GetMapping("/{jobSeekerId}/projects")
-    public List<ProjectResponse> getProjects(
-            @PathVariable Long jobSeekerId) {
 
+    @PutMapping("/{jobSeekerId}/projects/{projectId}")
+    public ProjectResponse updateProject(@PathVariable Long jobSeekerId, @PathVariable Long projectId, @RequestBody ProjectRequest request) {
+        return jobSeekerProfileService.updateProject(jobSeekerId, projectId, request);
+    }
+
+    @GetMapping("/{jobSeekerId}/projects")
+    public List<ProjectResponse> getProjects(@PathVariable Long jobSeekerId) {
         return jobSeekerProfileService.getProjects(jobSeekerId);
     }
+
     @DeleteMapping("/{jobSeekerId}/projects/{projectId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProject(
-            @PathVariable Long jobSeekerId,
-            @PathVariable Long projectId) {
-
+    public void deleteProject(@PathVariable Long jobSeekerId, @PathVariable Long projectId) {
         jobSeekerProfileService.deleteProject(jobSeekerId, projectId);
     }
+    
 
 }

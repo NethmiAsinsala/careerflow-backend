@@ -39,6 +39,8 @@ public interface JobSeekersProfileService {
 
     ProjectResponse addProject(Long jobSeekerId, ProjectRequest request);
 
+    ProjectResponse updateProject( Long jobSeekerId, Long projectId, ProjectRequest request);
+
     List<ProjectResponse> getProjects(Long jobSeekerId);
 
     void deleteProject(Long jobSeekerId, Long projectId);

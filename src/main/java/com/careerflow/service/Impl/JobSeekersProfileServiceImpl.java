@@ -232,7 +232,29 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
 
         return mapper.toProjectResponse(projectRepository.save(project));
     }
+    @Override
+    public ProjectResponse updateProject(
+            Long jobSeekerId,
+            Long projectId,
+            ProjectRequest request) {
 
+        getJobSeeker(jobSeekerId);
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        if (!project.getJobSeeker().getId().equals(jobSeekerId)) {
+            throw new RuntimeException("Project does not belong to this job seeker");
+        }
+
+        project.setName(request.getName());
+        project.setDescription(request.getDescription());
+        project.setTechnologies(request.getTechnologies());
+        project.setProjectUrl(request.getProjectUrl());
+
+        return mapper.toProjectResponse(
+                projectRepository.save(project));
+    }
     @Override
     public List<ProjectResponse> getProjects(Long jobSeekerId) {
         getJobSeeker(jobSeekerId);
