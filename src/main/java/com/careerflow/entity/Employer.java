@@ -19,4 +19,7 @@ public class Employer {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
+
+    @OneToOne(mappedBy = "employer", fetch = FetchType.LAZY)
+    private Company company;
 }
