@@ -20,7 +20,8 @@ public class SecurityConfig {
                                 "/api/job-seekers/**",
                                 "/api/companies/**",
                                 "/api/employers/**",
-                                "/api/jobs/**"
+                                "/api/jobs/**",
+                                "/api/job-applications/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
