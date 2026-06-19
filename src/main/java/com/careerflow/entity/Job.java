@@ -3,6 +3,7 @@ package com.careerflow.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,10 +38,10 @@ public class Job {
     private String experienceLevel;
 
     @Column(name = "salary_min")
-    private Double salaryMin;
+    private BigDecimal salaryMin;
 
     @Column(name = "salary_max")
-    private Double salaryMax;
+    private BigDecimal salaryMax;
 
     private String skills;
 
