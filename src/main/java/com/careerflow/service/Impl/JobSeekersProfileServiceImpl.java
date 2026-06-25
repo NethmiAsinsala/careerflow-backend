@@ -1,4 +1,4 @@
-package com.careerflow.service.Impl;
+package com.careerflow.service.impl;
 
 import com.careerflow.dto.request.EducationRequest;
 import com.careerflow.dto.request.ExperienceRequest;
