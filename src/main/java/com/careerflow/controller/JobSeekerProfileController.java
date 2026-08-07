@@ -111,6 +111,5 @@ public class JobSeekerProfileController {
     public void deleteProject(@PathVariable Long jobSeekerId, @PathVariable Long projectId) {
         jobSeekerProfileService.deleteProject(jobSeekerId, projectId);
     }
-    
 
 }
