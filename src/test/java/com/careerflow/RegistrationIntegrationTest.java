@@ -34,6 +34,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @EnabledIfEnvironmentVariable(named = "CAREERFLOW_DB_TESTS", matches = "true")
 class RegistrationIntegrationTest {
+    @org.springframework.test.context.DynamicPropertySource
+    static void jwtProperties(org.springframework.test.context.DynamicPropertyRegistry registry) {
+        String secret = java.util.Base64.getEncoder().encodeToString(
+                io.jsonwebtoken.Jwts.SIG.HS256.key().build().getEncoded());
+        registry.add("app.jwt.secret", () -> secret);
+    }
+
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
     @Autowired UserRepository users;

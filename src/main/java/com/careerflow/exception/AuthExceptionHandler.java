@@ -16,6 +16,13 @@ import java.util.Map;
 
 @RestControllerAdvice(assignableTypes = AuthController.class)
 public class AuthExceptionHandler {
+    @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
+    public ResponseEntity<ProblemDetail> invalidCredentials() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .header(org.springframework.http.HttpHeaders.WWW_AUTHENTICATE, "Bearer")
+                .body(ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid email or password"));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail validation(MethodArgumentNotValidException exception) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
