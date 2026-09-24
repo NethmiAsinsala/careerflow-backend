@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
+import com.careerflow.service.JobWorkflowRules;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 @Service
 @org.springframework.transaction.annotation.Transactional
@@ -26,6 +29,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     private final JobRepository jobRepository;
     private final JobSeekerRepository jobSeekerRepository;
     private final JobApplicationMapper mapper;
+    private final JobWorkflowRules workflow;
 
     @Override
     @PreAuthorize("@resourceAccess.ownsJobSeeker(#jobSeekerId)")
@@ -34,19 +38,21 @@ public class JobApplicationServiceImpl implements JobApplicationService {
             Long jobSeekerId,
             JobApplicationRequest request
     ) {
-        Job job = jobRepository.findById(jobId)
+        Job job = jobRepository.findByIdForUpdate(jobId)
                 .orElseThrow(() ->
-                        new RuntimeException("Job not found with id: " + jobId));
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found with id: " + jobId));
+
+        workflow.requireAcceptingApplications(job);
 
         JobSeeker jobSeeker = jobSeekerRepository.findById(jobSeekerId)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Job seeker not found with id: " + jobSeekerId
                         ));
 
         if (jobApplicationRepository.existsByJobIdAndJobSeekerId(
                 jobId, jobSeekerId)) {
-            throw new RuntimeException(
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Job seeker has already applied for this job"
             );
         }
@@ -106,6 +112,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public List<JobApplicationResponse> getApplicationsByStatus(
             String status
     ) {
+        workflow.requestedApplicationStatus(status);
         return jobApplicationRepository.findByStatus(status)
                 .stream()
                 .map(mapper::toResponse)
@@ -118,9 +125,10 @@ public class JobApplicationServiceImpl implements JobApplicationService {
             Long id,
             String status
     ) {
-        JobApplication application = getApplication(id);
+        JobApplication application = jobApplicationRepository.findByIdForUpdate(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job application not found"));
 
-        application.setStatus(status);
+        application.setStatus(workflow.nextApplicationStatus(application.getStatus(), status));
 
         return mapper.toResponse(
                 jobApplicationRepository.save(application)
@@ -130,7 +138,8 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Override
     @PreAuthorize("@resourceAccess.withdrawsApplication(#id)")
     public void withdrawApplication(Long id) {
-        JobApplication application = getApplication(id);
+        JobApplication application = jobApplicationRepository.findByIdForUpdate(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job application not found"));
 
         jobApplicationRepository.delete(application);
     }
@@ -138,7 +147,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     private JobApplication getApplication(Long id) {
         return jobApplicationRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Job application not found with id: " + id
                         ));
     }

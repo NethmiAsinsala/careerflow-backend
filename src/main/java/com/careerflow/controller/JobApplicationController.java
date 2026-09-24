@@ -4,6 +4,7 @@ import com.careerflow.dto.request.JobApplicationRequest;
 import com.careerflow.dto.response.JobApplicationResponse;
 import com.careerflow.service.JobApplicationService;
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class JobApplicationController {
     public ResponseEntity<JobApplicationResponse> applyForJob(
             @PathVariable Long jobId,
             @PathVariable Long jobSeekerId,
-            @RequestBody JobApplicationRequest request
+            @Valid @RequestBody JobApplicationRequest request
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)

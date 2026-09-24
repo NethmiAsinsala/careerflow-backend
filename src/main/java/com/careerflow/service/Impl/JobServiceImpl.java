@@ -14,6 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import com.careerflow.service.JobWorkflowRules;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 @Service
 @PreAuthorize("denyAll()")
@@ -24,6 +27,7 @@ public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final EmployerRepository employerRepository;
     private final JobMapper jobMapper;
+    private final JobWorkflowRules workflow;
 
     @Override
     @PreAuthorize("@resourceAccess.managesEmployer(#employerId)")
@@ -31,11 +35,13 @@ public class JobServiceImpl implements JobService {
 
         Employer employer = employerRepository.findById(employerId)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Employer not found with id: " + employerId
                         ));
 
+        String status = workflow.validateJob(request, null);
         Job job = jobMapper.toEntity(request);
+        job.setStatus(status);
         job.setEmployer(employer);
 
         return jobMapper.toResponse(
@@ -61,7 +67,7 @@ public class JobServiceImpl implements JobService {
 
         Job job = jobRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Job not found with id: " + id
                         ));
 
@@ -84,6 +90,7 @@ public class JobServiceImpl implements JobService {
     @PreAuthorize("permitAll()")
     public List<JobResponse> getJobsByStatus(String status) {
 
+        workflow.requestedJobStatus(status);
         return jobRepository.findByStatus(status)
                 .stream()
                 .map(jobMapper::toResponse)
@@ -94,13 +101,15 @@ public class JobServiceImpl implements JobService {
     @PreAuthorize("@resourceAccess.managesJob(#id)")
     public JobResponse updateJob(Long id, JobRequest request) {
 
-        Job job = jobRepository.findById(id)
+        Job job = jobRepository.findByIdForUpdate(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Job not found with id: " + id
                         ));
 
+        String status = workflow.validateJob(request, job.getStatus());
         jobMapper.updateEntity(job, request);
+        job.setStatus(status);
 
         return jobMapper.toResponse(
                 jobRepository.save(job)
@@ -111,9 +120,9 @@ public class JobServiceImpl implements JobService {
     @PreAuthorize("@resourceAccess.managesJob(#id)")
     public void deleteJob(Long id) {
 
-        Job job = jobRepository.findById(id)
+        Job job = jobRepository.findByIdForUpdate(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Job not found with id: " + id
                         ));
 

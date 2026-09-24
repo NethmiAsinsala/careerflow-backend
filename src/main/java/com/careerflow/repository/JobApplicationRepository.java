@@ -27,4 +27,7 @@ public interface JobApplicationRepository
     boolean existsByIdAndJobSeeker_User_Id(Long id, Long userId);
     boolean existsByIdAndJob_Employer_User_Id(Long id, Long userId);
     boolean existsByJobSeeker_IdAndJob_Employer_User_Id(Long jobSeekerId, Long userId);
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @org.springframework.data.jpa.repository.Query("select record from JobApplication record where record.id = :id")
+    java.util.Optional<JobApplication> findByIdForUpdate(@org.springframework.data.repository.query.Param("id") Long id);
 }

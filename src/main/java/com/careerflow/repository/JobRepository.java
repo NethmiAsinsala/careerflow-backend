@@ -13,4 +13,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     List<Job> findByEmployerIdAndStatus(Long employerId, String status);
     boolean existsByIdAndEmployer_User_Id(Long id, Long userId);
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @org.springframework.data.jpa.repository.Query("select record from Job record where record.id = :id")
+    java.util.Optional<Job> findByIdForUpdate(@org.springframework.data.repository.query.Param("id") Long id);
 }
