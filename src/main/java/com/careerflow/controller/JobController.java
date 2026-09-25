@@ -1,6 +1,10 @@
 package com.careerflow.controller;
 
 import com.careerflow.dto.request.JobRequest;
+import com.careerflow.dto.request.JobSearchRequest;
+import com.careerflow.dto.response.PageResponse;
+import org.springdoc.core.annotations.ParameterObject;
+import io.swagger.v3.oas.annotations.Operation;
 import com.careerflow.dto.response.JobResponse;
 import com.careerflow.service.JobService;
 import jakarta.validation.Valid;
@@ -29,11 +33,10 @@ public class JobController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JobResponse>> getAllJobs() {
-
-        return ResponseEntity.ok(
-                jobService.getAllJobs()
-        );
+    @Operation(summary = "Search jobs with filters, sorting and pagination")
+    public ResponseEntity<PageResponse<JobResponse>> searchJobs(
+            @Valid @ModelAttribute @ParameterObject JobSearchRequest request) {
+        return ResponseEntity.ok(jobService.searchJobs(request));
     }
 
     @GetMapping("/{id}")

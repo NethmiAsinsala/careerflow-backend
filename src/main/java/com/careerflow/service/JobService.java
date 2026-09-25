@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface JobService {
 
+    com.careerflow.dto.response.PageResponse<JobResponse> searchJobs(com.careerflow.dto.request.JobSearchRequest request);
+
     JobResponse createJob(Long employerId, JobRequest request);
 
     List<JobResponse> getAllJobs();

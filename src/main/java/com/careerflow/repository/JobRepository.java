@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface JobRepository extends JpaRepository<Job, Long> {
+public interface JobRepository extends JpaRepository<Job, Long>, org.springframework.data.jpa.repository.JpaSpecificationExecutor<Job> {
 
     List<Job> findByEmployerId(Long employerId);
 

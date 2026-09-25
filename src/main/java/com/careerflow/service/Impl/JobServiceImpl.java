@@ -14,6 +14,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import com.careerflow.dto.request.JobSearchRequest;
+import com.careerflow.dto.response.PageResponse;
+import com.careerflow.specification.JobSpecifications;
 import com.careerflow.service.JobWorkflowRules;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
@@ -28,6 +36,31 @@ public class JobServiceImpl implements JobService {
     private final EmployerRepository employerRepository;
     private final JobMapper jobMapper;
     private final JobWorkflowRules workflow;
+    private final Clock clock;
+
+    @Override
+    @Transactional(readOnly = true)
+    @PreAuthorize("permitAll()")
+    public PageResponse<JobResponse> searchJobs(JobSearchRequest request) {
+        if (request.getSalaryMin() != null && request.getSalaryMax() != null
+                && request.getSalaryMin().compareTo(request.getSalaryMax()) > 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Minimum salary must not exceed maximum salary");
+        }
+        String[] sortParts = request.getSort().split(",", -1);
+        Set<String> sortable = Set.of("createdAt", "title", "salaryMin", "salaryMax", "applicationDeadline", "id");
+        if (sortParts.length != 2 || !sortable.contains(sortParts[0])
+                || !(sortParts[1].equalsIgnoreCase("asc") || sortParts[1].equalsIgnoreCase("desc"))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Sort must be field,asc or field,desc; fields: createdAt, title, salaryMin, salaryMax, applicationDeadline, id");
+        }
+        Sort.Direction direction = Sort.Direction.fromString(sortParts[1]);
+        Sort sort = Sort.by(direction, sortParts[0]);
+        if (!sortParts[0].equals("id")) sort = sort.and(Sort.by(direction, "id"));
+        var page = PageRequest.of(request.getPage(), request.getSize(), sort);
+        return PageResponse.from(jobRepository.findAll(
+                JobSpecifications.matching(request, LocalDateTime.now(clock)), page).map(jobMapper::toResponse));
+    }
+
 
     @Override
     @PreAuthorize("@resourceAccess.managesEmployer(#employerId)")
