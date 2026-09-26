@@ -21,7 +21,8 @@ public class SecurityConfig {
                                 "/api/companies/**",
                                 "/api/employers/**",
                                 "/api/jobs/**",
-                                "/api/job-applications/**"
+                                "/api/job-applications/**",
+                                "/api/saved-jobs/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
