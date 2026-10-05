@@ -10,11 +10,13 @@ import com.careerflow.repository.JobRepository;
 import com.careerflow.service.JobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@PreAuthorize("denyAll()")
 @RequiredArgsConstructor
 @Transactional
 public class JobServiceImpl implements JobService {
@@ -24,6 +26,7 @@ public class JobServiceImpl implements JobService {
     private final JobMapper jobMapper;
 
     @Override
+    @PreAuthorize("@resourceAccess.managesEmployer(#employerId)")
     public JobResponse createJob(Long employerId, JobRequest request) {
 
         Employer employer = employerRepository.findById(employerId)
@@ -42,6 +45,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("permitAll()")
     public List<JobResponse> getAllJobs() {
 
         return jobRepository.findAll()
@@ -52,6 +56,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("permitAll()")
     public JobResponse getJobById(Long id) {
 
         Job job = jobRepository.findById(id)
@@ -65,6 +70,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("permitAll()")
     public List<JobResponse> getJobsByEmployerId(Long employerId) {
 
         return jobRepository.findByEmployerId(employerId)
@@ -75,6 +81,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("permitAll()")
     public List<JobResponse> getJobsByStatus(String status) {
 
         return jobRepository.findByStatus(status)
@@ -84,6 +91,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJob(#id)")
     public JobResponse updateJob(Long id, JobRequest request) {
 
         Job job = jobRepository.findById(id)
@@ -100,6 +108,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJob(#id)")
     public void deleteJob(Long id) {
 
         Job job = jobRepository.findById(id)

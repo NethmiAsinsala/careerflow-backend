@@ -21,10 +21,13 @@ import com.careerflow.repository.ProjectRepository;
 import com.careerflow.repository.SkillRepository;
 import com.careerflow.service.JobSeekersProfileService;
 import org.springframework.stereotype.Service;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
 @Service
+@org.springframework.transaction.annotation.Transactional
+@PreAuthorize("denyAll()")
 public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
 
     private final JobSeekerRepository jobSeekerRepository;
@@ -51,6 +54,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public SkillResponse addSkill(Long jobSeekerId, SkillRequest request) {
         JobSeeker jobSeeker = getJobSeeker(jobSeekerId);
 
@@ -60,6 +64,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         return mapper.toSkillResponse(skillRepository.save(skill));
     }
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public SkillResponse updateSkill(
             Long jobSeekerId,
             Long skillId,
@@ -71,7 +76,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 .orElseThrow(() -> new RuntimeException("Skill not found"));
 
         if (!skill.getJobSeeker().getId().equals(jobSeekerId)) {
-            throw new RuntimeException("Skill does not belong to this job seeker");
+            throw new org.springframework.security.access.AccessDeniedException("Skill does not belong to this job seeker");
         }
 
         skill.setName(request.getName());
@@ -80,6 +85,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.readsJobSeeker(#jobSeekerId)")
     public List<SkillResponse> getSkills(Long jobSeekerId) {
         getJobSeeker(jobSeekerId);
 
@@ -91,6 +97,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public void deleteSkill(Long jobSeekerId, Long skillId) {
         getJobSeeker(jobSeekerId);
 
@@ -98,13 +105,14 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 .orElseThrow(() -> new RuntimeException("Skill not found"));
 
         if (!skill.getJobSeeker().getId().equals(jobSeekerId)) {
-            throw new RuntimeException("Skill does not belong to this job seeker");
+            throw new org.springframework.security.access.AccessDeniedException("Skill does not belong to this job seeker");
         }
 
         skillRepository.delete(skill);
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public EducationResponse addEducation(Long jobSeekerId, EducationRequest request) {
         JobSeeker jobSeeker = getJobSeeker(jobSeekerId);
 
@@ -114,6 +122,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         return mapper.toEducationResponse(educationRepository.save(education));
     }
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public EducationResponse updateEducation(
             Long jobSeekerId,
             Long educationId,
@@ -125,7 +134,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 .orElseThrow(() -> new RuntimeException("Education not found"));
 
         if (!education.getJobSeeker().getId().equals(jobSeekerId)) {
-            throw new RuntimeException("Education does not belong to this job seeker");
+            throw new org.springframework.security.access.AccessDeniedException("Education does not belong to this job seeker");
         }
 
         education.setInstitution(request.getInstitution());
@@ -140,6 +149,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.readsJobSeeker(#jobSeekerId)")
     public List<EducationResponse> getEducation(Long jobSeekerId) {
         getJobSeeker(jobSeekerId);
 
@@ -151,6 +161,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public void deleteEducation(Long jobSeekerId, Long educationId) {
         getJobSeeker(jobSeekerId);
 
@@ -158,13 +169,14 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 .orElseThrow(() -> new RuntimeException("Education not found"));
 
         if (!education.getJobSeeker().getId().equals(jobSeekerId)) {
-            throw new RuntimeException("Education does not belong to this job seeker");
+            throw new org.springframework.security.access.AccessDeniedException("Education does not belong to this job seeker");
         }
 
         educationRepository.delete(education);
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public ExperienceResponse addExperience(Long jobSeekerId, ExperienceRequest request) {
         JobSeeker jobSeeker = getJobSeeker(jobSeekerId);
 
@@ -174,6 +186,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         return mapper.toExperienceResponse(experienceRepository.save(experience));
     }
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public ExperienceResponse updateExperience(
             Long jobSeekerId,
             Long experienceId,
@@ -185,7 +198,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 .orElseThrow(() -> new RuntimeException("Experience not found"));
 
         if (!experience.getJobSeeker().getId().equals(jobSeekerId)) {
-            throw new RuntimeException("Experience does not belong to this job seeker");
+            throw new org.springframework.security.access.AccessDeniedException("Experience does not belong to this job seeker");
         }
 
         experience.setCompanyName(request.getCompanyName());
@@ -199,6 +212,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.readsJobSeeker(#jobSeekerId)")
     public List<ExperienceResponse> getExperience(Long jobSeekerId) {
         getJobSeeker(jobSeekerId);
 
@@ -210,6 +224,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public void deleteExperience(Long jobSeekerId, Long experienceId) {
         getJobSeeker(jobSeekerId);
 
@@ -217,13 +232,14 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 .orElseThrow(() -> new RuntimeException("Experience not found"));
 
         if (!experience.getJobSeeker().getId().equals(jobSeekerId)) {
-            throw new RuntimeException("Experience does not belong to this job seeker");
+            throw new org.springframework.security.access.AccessDeniedException("Experience does not belong to this job seeker");
         }
 
         experienceRepository.delete(experience);
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public ProjectResponse addProject(Long jobSeekerId, ProjectRequest request) {
         JobSeeker jobSeeker = getJobSeeker(jobSeekerId);
 
@@ -233,6 +249,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         return mapper.toProjectResponse(projectRepository.save(project));
     }
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public ProjectResponse updateProject(
             Long jobSeekerId,
             Long projectId,
@@ -244,7 +261,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
         if (!project.getJobSeeker().getId().equals(jobSeekerId)) {
-            throw new RuntimeException("Project does not belong to this job seeker");
+            throw new org.springframework.security.access.AccessDeniedException("Project does not belong to this job seeker");
         }
 
         project.setName(request.getName());
@@ -256,6 +273,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 projectRepository.save(project));
     }
     @Override
+    @PreAuthorize("@resourceAccess.readsJobSeeker(#jobSeekerId)")
     public List<ProjectResponse> getProjects(Long jobSeekerId) {
         getJobSeeker(jobSeekerId);
 
@@ -267,6 +285,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public void deleteProject(Long jobSeekerId, Long projectId) {
         getJobSeeker(jobSeekerId);
 
@@ -274,7 +293,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
         if (!project.getJobSeeker().getId().equals(jobSeekerId)) {
-            throw new RuntimeException("Project does not belong to this job seeker");
+            throw new org.springframework.security.access.AccessDeniedException("Project does not belong to this job seeker");
         }
 
         projectRepository.delete(project);

@@ -12,4 +12,5 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findByStatus(String status);
 
     List<Job> findByEmployerIdAndStatus(Long employerId, String status);
+    boolean existsByIdAndEmployer_User_Id(Long id, Long userId);
 }

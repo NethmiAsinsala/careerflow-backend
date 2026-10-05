@@ -12,10 +12,13 @@ import com.careerflow.repository.JobSeekerRepository;
 import com.careerflow.service.JobApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
 @Service
+@org.springframework.transaction.annotation.Transactional
+@PreAuthorize("denyAll()")
 @RequiredArgsConstructor
 public class JobApplicationServiceImpl implements JobApplicationService {
 
@@ -25,6 +28,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     private final JobApplicationMapper mapper;
 
     @Override
+    @PreAuthorize("@resourceAccess.ownsJobSeeker(#jobSeekerId)")
     public JobApplicationResponse applyForJob(
             Long jobId,
             Long jobSeekerId,
@@ -61,6 +65,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.isAdmin()")
     public List<JobApplicationResponse> getAllApplications() {
         return jobApplicationRepository.findAll()
                 .stream()
@@ -69,6 +74,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.readsApplication(#id)")
     public JobApplicationResponse getApplicationById(Long id) {
         JobApplication application = getApplication(id);
 
@@ -76,6 +82,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJob(#jobId)")
     public List<JobApplicationResponse> getApplicationsByJob(Long jobId) {
         return jobApplicationRepository.findByJobId(jobId)
                 .stream()
@@ -84,6 +91,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesJobSeeker(#jobSeekerId)")
     public List<JobApplicationResponse> getApplicationsByJobSeeker(
             Long jobSeekerId
     ) {
@@ -94,6 +102,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.isAdmin()")
     public List<JobApplicationResponse> getApplicationsByStatus(
             String status
     ) {
@@ -104,6 +113,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.reviewsApplication(#id)")
     public JobApplicationResponse updateApplicationStatus(
             Long id,
             String status
@@ -118,6 +128,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.withdrawsApplication(#id)")
     public void withdrawApplication(Long id) {
         JobApplication application = getApplication(id);
 

@@ -10,4 +10,5 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     Optional<Company> findByEmployerId(Long employerId);
 
     boolean existsByEmployerId(Long employerId);
+    boolean existsByIdAndEmployer_User_Id(Long id, Long userId);
 }

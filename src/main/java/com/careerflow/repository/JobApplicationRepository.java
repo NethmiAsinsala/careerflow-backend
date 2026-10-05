@@ -24,4 +24,7 @@ public interface JobApplicationRepository
             Long jobId,
             Long jobSeekerId
     );
+    boolean existsByIdAndJobSeeker_User_Id(Long id, Long userId);
+    boolean existsByIdAndJob_Employer_User_Id(Long id, Long userId);
+    boolean existsByJobSeeker_IdAndJob_Employer_User_Id(Long jobSeekerId, Long userId);
 }

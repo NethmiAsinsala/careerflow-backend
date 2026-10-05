@@ -12,10 +12,13 @@ import com.careerflow.repository.SavedJobRepository;
 import com.careerflow.service.SavedJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
 @Service
+@org.springframework.transaction.annotation.Transactional
+@PreAuthorize("denyAll()")
 @RequiredArgsConstructor
 public class SavedJobServiceImpl implements SavedJobService {
 
@@ -25,6 +28,7 @@ public class SavedJobServiceImpl implements SavedJobService {
     private final SavedJobMapper savedJobMapper;
 
     @Override
+    @PreAuthorize("@resourceAccess.ownsJobSeeker(#request.jobSeekerId)")
     public SavedJobResponse saveJob(SavedJobRequest request) {
 
         if (savedJobRepository.existsByJobIdAndJobSeekerId(
@@ -51,6 +55,7 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.ownsJobSeeker(#jobSeekerId)")
     public List<SavedJobResponse> getSavedJobs(Long jobSeekerId) {
 
         return savedJobRepository.findByJobSeekerId(jobSeekerId)
@@ -60,6 +65,7 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.ownsJobSeeker(#jobSeekerId)")
     public void removeSavedJob(Long jobId, Long jobSeekerId) {
 
         SavedJob savedJob = savedJobRepository

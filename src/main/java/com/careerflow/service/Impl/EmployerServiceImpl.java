@@ -10,11 +10,13 @@ import com.careerflow.repository.UserRepository;
 import com.careerflow.service.EmployerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@PreAuthorize("denyAll()")
 @RequiredArgsConstructor
 @Transactional
 public class EmployerServiceImpl implements EmployerService {
@@ -24,6 +26,7 @@ public class EmployerServiceImpl implements EmployerService {
     private final EmployerMapper employerMapper;
 
     @Override
+    @PreAuthorize("@resourceAccess.isAdmin()")
     public EmployerResponse createEmployer(EmployerRequest request) {
 
         User user = userRepository.findById(request.getUserId())
@@ -49,6 +52,7 @@ public class EmployerServiceImpl implements EmployerService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("@resourceAccess.isAdmin()")
     public List<EmployerResponse> getAllEmployers() {
 
         return employerRepository.findAll()
@@ -59,6 +63,7 @@ public class EmployerServiceImpl implements EmployerService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("@resourceAccess.managesEmployer(#id)")
     public EmployerResponse getEmployerById(Long id) {
 
         Employer employer = employerRepository.findById(id)
@@ -72,6 +77,7 @@ public class EmployerServiceImpl implements EmployerService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("@resourceAccess.readsEmployerUser(#userId)")
     public EmployerResponse getEmployerByUserId(Long userId) {
 
         Employer employer = employerRepository.findByUserId(userId)
@@ -84,6 +90,7 @@ public class EmployerServiceImpl implements EmployerService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.isAdmin()")
     public void deleteEmployer(Long id) {
 
         Employer employer = employerRepository.findById(id)

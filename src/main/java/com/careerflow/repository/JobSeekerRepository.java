@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JobSeekerRepository extends JpaRepository<JobSeeker, Long> {
     java.util.Optional<JobSeeker> findByUserId(Long userId);
+    boolean existsByIdAndUser_Id(Long id, Long userId);
 }

@@ -10,11 +10,13 @@ import com.careerflow.repository.EmployerRepository;
 import com.careerflow.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@PreAuthorize("denyAll()")
 @RequiredArgsConstructor
 @Transactional
 public class CompanyServiceImpl implements CompanyService {
@@ -24,6 +26,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyMapper companyMapper;
 
     @Override
+    @PreAuthorize("@resourceAccess.managesEmployer(#employerId)")
     public CompanyResponse createCompany(Long employerId, CompanyRequest request) {
 
         Employer employer = employerRepository.findById(employerId)
@@ -46,6 +49,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("isAuthenticated()")
     public List<CompanyResponse> getAllCompanies() {
 
         return companyRepository.findAll()
@@ -56,6 +60,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("isAuthenticated()")
     public CompanyResponse getCompanyById(Long id) {
 
         Company company = companyRepository.findById(id)
@@ -67,6 +72,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("isAuthenticated()")
     public CompanyResponse getCompanyByEmployerId(Long employerId) {
 
         Company company = companyRepository.findByEmployerId(employerId)
@@ -79,6 +85,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesCompany(#id)")
     public CompanyResponse updateCompany(Long id, CompanyRequest request) {
 
         Company company = companyRepository.findById(id)
@@ -93,6 +100,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @PreAuthorize("@resourceAccess.managesCompany(#id)")
     public void deleteCompany(Long id) {
 
         Company company = companyRepository.findById(id)
