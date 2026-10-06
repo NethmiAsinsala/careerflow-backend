@@ -16,7 +16,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@RestControllerAdvice(assignableTypes = {JobController.class, JobApplicationController.class})
+@RestControllerAdvice(assignableTypes = {JobController.class, JobApplicationController.class, com.careerflow.controller.PersonalProfileController.class, com.careerflow.controller.JobMatchController.class})
 public class JobWorkflowExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,

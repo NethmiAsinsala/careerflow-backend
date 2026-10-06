@@ -10,3 +10,7 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 }
+
+//{
+//  "email": "candidate@example.com",
+//  "password": "ExamplePass123!",

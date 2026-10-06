@@ -1,0 +1,10 @@
+ALTER TABLE job_seekers
+    ADD COLUMN first_name VARCHAR(100) NULL,
+    ADD COLUMN last_name VARCHAR(100) NULL,
+    ADD COLUMN phone VARCHAR(30) NULL,
+    ADD COLUMN headline VARCHAR(200) NULL,
+    ADD COLUMN summary VARCHAR(3000) NULL,
+    ADD COLUMN location VARCHAR(255) NULL,
+    ADD COLUMN linkedin_url VARCHAR(500) NULL,
+    ADD COLUMN github_url VARCHAR(500) NULL,
+    ADD COLUMN portfolio_url VARCHAR(500) NULL;
