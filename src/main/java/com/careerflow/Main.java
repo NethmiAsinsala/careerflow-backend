@@ -11,6 +11,6 @@ public class Main {
     }
 }
 
-//{
-//  "email": "candidate@example.com",
-//  "password": "ExamplePass123!",
+/*{
+  "email": "candidate@example.com",
+ "password": "ExamplePass123!",*/
