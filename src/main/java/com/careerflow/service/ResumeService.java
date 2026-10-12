@@ -16,20 +16,31 @@ import java.time.LocalDateTime;
 
 @Service @RequiredArgsConstructor @Transactional @PreAuthorize("denyAll()")
 public class ResumeService {
+
  public static final int MAX_BYTES=5*1024*1024;
  private final ResumeRepository resumes;
  private final JobSeekerRepository seekers;
  public record Metadata(Long jobSeekerId,String filename,int sizeBytes,LocalDateTime updatedAt) { }
+
  @PreAuthorize("hasRole('JOB_SEEKER')")
  public Metadata upload(MultipartFile file) {
-  if(file.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Resume must not be empty");
-  if(file.getSize()>MAX_BYTES) throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,"Resume must be at most 5 MB");
+  if(file.isEmpty())
+   throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Resume must not be empty");
+  if(file.getSize()>MAX_BYTES)
+   throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,"Resume must be at most 5 MB");
   byte[] content;
-  try(var stream=file.getInputStream()) { content=stream.readNBytes(MAX_BYTES+1); }
-  catch(IOException e) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Could not read resume"); }
-  if(content.length>MAX_BYTES) throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,"Resume must be at most 5 MB");
+
+  try(var stream=file.getInputStream()) {
+   content=stream.readNBytes(MAX_BYTES+1);
+  } catch(IOException e) {
+   throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Could not read resume");
+  }
+  if(content.length>MAX_BYTES)
+   throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,"Resume must be at most 5 MB");
+
   String start=new String(content,0,Math.min(content.length,8),StandardCharsets.US_ASCII);
   String tail=new String(content,Math.max(0,content.length-1024),Math.min(content.length,1024),StandardCharsets.US_ASCII);
+
   if(!start.startsWith("%PDF-") || !tail.contains("%%EOF"))
    throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE,"Upload a PDF resume");
   Long id=ownId();
@@ -42,8 +53,10 @@ public class ResumeService {
  }
  @Transactional(readOnly=true) @PreAuthorize("hasRole('JOB_SEEKER')")
  public byte[] downloadOwn() { return content(ownId()); }
+
  @Transactional(readOnly=true) @PreAuthorize("@resourceAccess.readsJobSeeker(#jobSeekerId)")
  public byte[] download(Long jobSeekerId) { return content(jobSeekerId); }
+
  @PreAuthorize("hasRole('JOB_SEEKER')")
  public void deleteOwn() {
   Long id=ownId();seekers.findByIdForResumeUpdate(id).orElseThrow();
