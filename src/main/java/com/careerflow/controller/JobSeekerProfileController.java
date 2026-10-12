@@ -26,12 +26,12 @@ public class JobSeekerProfileController {
 
     @PostMapping("/{jobSeekerId}/skills")
     @ResponseStatus(HttpStatus.CREATED)
-    public SkillResponse addSkill( @PathVariable Long jobSeekerId, @RequestBody SkillRequest request) {
+    public SkillResponse addSkill( @PathVariable Long jobSeekerId, @jakarta.validation.Valid @RequestBody SkillRequest request) {
         return jobSeekerProfileService.addSkill(jobSeekerId, request);
     }
 
     @PutMapping("/{jobSeekerId}/skills/{skillId}")
-    public SkillResponse updateSkill( @PathVariable Long jobSeekerId, @PathVariable Long skillId, @RequestBody SkillRequest request) {
+    public SkillResponse updateSkill( @PathVariable Long jobSeekerId, @PathVariable Long skillId, @jakarta.validation.Valid @RequestBody SkillRequest request) {
         return jobSeekerProfileService.updateSkill(jobSeekerId, skillId, request);
     }
 
@@ -48,12 +48,12 @@ public class JobSeekerProfileController {
 
     @PostMapping("/{jobSeekerId}/education")
     @ResponseStatus(HttpStatus.CREATED)
-    public EducationResponse addEducation(@PathVariable Long jobSeekerId, @RequestBody EducationRequest request) {
+    public EducationResponse addEducation(@PathVariable Long jobSeekerId, @jakarta.validation.Valid @RequestBody EducationRequest request) {
         return jobSeekerProfileService.addEducation(jobSeekerId, request);
     }
 
     @PutMapping("/{jobSeekerId}/education/{educationId}")
-    public EducationResponse updateEducation( @PathVariable Long jobSeekerId, @PathVariable Long educationId, @RequestBody EducationRequest request) {
+    public EducationResponse updateEducation( @PathVariable Long jobSeekerId, @PathVariable Long educationId, @jakarta.validation.Valid @RequestBody EducationRequest request) {
         return jobSeekerProfileService.updateEducation(jobSeekerId, educationId, request);
     }
 
@@ -70,12 +70,12 @@ public class JobSeekerProfileController {
 
     @PostMapping("/{jobSeekerId}/experience")
     @ResponseStatus(HttpStatus.CREATED)
-    public ExperienceResponse addExperience( @PathVariable Long jobSeekerId, @RequestBody ExperienceRequest request) {
+    public ExperienceResponse addExperience( @PathVariable Long jobSeekerId, @jakarta.validation.Valid @RequestBody ExperienceRequest request) {
         return jobSeekerProfileService.addExperience(jobSeekerId, request);
     }
 
     @PutMapping("/{jobSeekerId}/experience/{experienceId}")
-    public ExperienceResponse updateExperience(@PathVariable Long jobSeekerId, @PathVariable Long experienceId, @RequestBody ExperienceRequest request) {
+    public ExperienceResponse updateExperience(@PathVariable Long jobSeekerId, @PathVariable Long experienceId, @jakarta.validation.Valid @RequestBody ExperienceRequest request) {
         return jobSeekerProfileService.updateExperience(jobSeekerId, experienceId, request);
     }
 
@@ -92,12 +92,12 @@ public class JobSeekerProfileController {
 
     @PostMapping("/{jobSeekerId}/projects")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProjectResponse addProject(@PathVariable Long jobSeekerId, @RequestBody ProjectRequest request) {
+    public ProjectResponse addProject(@PathVariable Long jobSeekerId, @jakarta.validation.Valid @RequestBody ProjectRequest request) {
         return jobSeekerProfileService.addProject(jobSeekerId, request);
     }
 
     @PutMapping("/{jobSeekerId}/projects/{projectId}")
-    public ProjectResponse updateProject(@PathVariable Long jobSeekerId, @PathVariable Long projectId, @RequestBody ProjectRequest request) {
+    public ProjectResponse updateProject(@PathVariable Long jobSeekerId, @PathVariable Long projectId, @jakarta.validation.Valid @RequestBody ProjectRequest request) {
         return jobSeekerProfileService.updateProject(jobSeekerId, projectId, request);
     }
 

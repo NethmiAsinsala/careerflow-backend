@@ -19,7 +19,7 @@ public class SavedJobController {
 
     @PostMapping
     public ResponseEntity<SavedJobResponse> saveJob(
-            @RequestBody SavedJobRequest request) {
+            @jakarta.validation.Valid @RequestBody SavedJobRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

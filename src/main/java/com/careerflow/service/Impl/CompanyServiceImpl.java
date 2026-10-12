@@ -31,11 +31,10 @@ public class CompanyServiceImpl implements CompanyService {
 
         Employer employer = employerRepository.findById(employerId)
                 .orElseThrow(() ->
-                        new RuntimeException("Employer not found with id: " + employerId));
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Employer not found with id: " + employerId));
 
         if (companyRepository.existsByEmployerId(employerId)) {
-            throw new RuntimeException(
-                    "Company already exists for employer id: " + employerId
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "Company already exists for employer id: " + employerId
             );
         }
 
@@ -65,7 +64,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         Company company = companyRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Company not found with id: " + id));
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Company not found with id: " + id));
 
         return companyMapper.toResponse(company);
     }
@@ -77,8 +76,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         Company company = companyRepository.findByEmployerId(employerId)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "Company not found for employer id: " + employerId
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Company not found for employer id: " + employerId
                         ));
 
         return companyMapper.toResponse(company);
@@ -90,7 +88,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         Company company = companyRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Company not found with id: " + id));
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Company not found with id: " + id));
 
         companyMapper.updateEntity(company, request);
 
@@ -105,7 +103,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         Company company = companyRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Company not found with id: " + id));
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Company not found with id: " + id));
 
         companyRepository.delete(company);
     }

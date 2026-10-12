@@ -25,6 +25,7 @@ public class PersonalProfileServiceImpl implements PersonalProfileService {
     private final EducationRepository education;
     private final ExperienceRepository experience;
     private final ProjectRepository projects;
+    private final CertificationRepository certifications;
     private final JobSeekerProfileMapper mapper;
 
     @Override
@@ -72,6 +73,7 @@ public class PersonalProfileServiceImpl implements PersonalProfileService {
                 skills.findByJobSeekerIdOrderByIdAsc(id).stream().map(mapper::toSkillResponse).toList(),
                 education.findByJobSeekerIdOrderByIdAsc(id).stream().map(mapper::toEducationResponse).toList(),
                 experience.findByJobSeekerIdOrderByIdAsc(id).stream().map(mapper::toExperienceResponse).toList(),
-                projects.findByJobSeekerIdOrderByIdAsc(id).stream().map(mapper::toProjectResponse).toList());
+                projects.findByJobSeekerIdOrderByIdAsc(id).stream().map(mapper::toProjectResponse).toList(),
+                certifications.findByJobSeekerIdOrderByIdAsc(id));
     }
 }

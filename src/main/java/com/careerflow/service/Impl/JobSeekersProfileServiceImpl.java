@@ -73,7 +73,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         getJobSeeker(jobSeekerId);
 
         Skill skill = skillRepository.findById(skillId)
-                .orElseThrow(() -> new RuntimeException("Skill not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Skill not found"));
 
         if (!skill.getJobSeeker().getId().equals(jobSeekerId)) {
             throw new org.springframework.security.access.AccessDeniedException("Skill does not belong to this job seeker");
@@ -102,7 +102,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         getJobSeeker(jobSeekerId);
 
         Skill skill = skillRepository.findById(skillId)
-                .orElseThrow(() -> new RuntimeException("Skill not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Skill not found"));
 
         if (!skill.getJobSeeker().getId().equals(jobSeekerId)) {
             throw new org.springframework.security.access.AccessDeniedException("Skill does not belong to this job seeker");
@@ -131,7 +131,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         getJobSeeker(jobSeekerId);
 
         Education education = educationRepository.findById(educationId)
-                .orElseThrow(() -> new RuntimeException("Education not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Education not found"));
 
         if (!education.getJobSeeker().getId().equals(jobSeekerId)) {
             throw new org.springframework.security.access.AccessDeniedException("Education does not belong to this job seeker");
@@ -166,7 +166,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         getJobSeeker(jobSeekerId);
 
         Education education = educationRepository.findById(educationId)
-                .orElseThrow(() -> new RuntimeException("Education not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Education not found"));
 
         if (!education.getJobSeeker().getId().equals(jobSeekerId)) {
             throw new org.springframework.security.access.AccessDeniedException("Education does not belong to this job seeker");
@@ -195,7 +195,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         getJobSeeker(jobSeekerId);
 
         Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new RuntimeException("Experience not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Experience not found"));
 
         if (!experience.getJobSeeker().getId().equals(jobSeekerId)) {
             throw new org.springframework.security.access.AccessDeniedException("Experience does not belong to this job seeker");
@@ -229,7 +229,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         getJobSeeker(jobSeekerId);
 
         Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new RuntimeException("Experience not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Experience not found"));
 
         if (!experience.getJobSeeker().getId().equals(jobSeekerId)) {
             throw new org.springframework.security.access.AccessDeniedException("Experience does not belong to this job seeker");
@@ -258,7 +258,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         getJobSeeker(jobSeekerId);
 
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Project not found"));
 
         if (!project.getJobSeeker().getId().equals(jobSeekerId)) {
             throw new org.springframework.security.access.AccessDeniedException("Project does not belong to this job seeker");
@@ -290,7 +290,7 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
         getJobSeeker(jobSeekerId);
 
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Project not found"));
 
         if (!project.getJobSeeker().getId().equals(jobSeekerId)) {
             throw new org.springframework.security.access.AccessDeniedException("Project does not belong to this job seeker");
@@ -301,6 +301,6 @@ public class JobSeekersProfileServiceImpl implements JobSeekersProfileService {
 
     private JobSeeker getJobSeeker(Long jobSeekerId) {
         return jobSeekerRepository.findById(jobSeekerId)
-                .orElseThrow(() -> new RuntimeException("Job seeker not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Job seeker not found"));
     }
 }

@@ -23,9 +23,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtService jwtService,
-            AuthService authService, ApiSecurityErrorHandler errors) throws Exception {
+            AuthService authService, ApiSecurityErrorHandler errors, TokenRevocationService tokens) throws Exception {
         // Bearer tokens are supplied in a header, not automatically sent as browser cookies.
-        http.csrf(csrf -> csrf.disable())
+        http.cors(org.springframework.security.config.Customizer.withDefaults()).csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .requestCache(cache -> cache.disable())
                 .formLogin(form -> form.disable())
@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/jobs/*/match").hasRole("JOB_SEEKER")
                         .requestMatchers(HttpMethod.GET, "/api/jobs", "/api/jobs/**").permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtService, authService, errors),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtService, tokens, authService, errors),
                         UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

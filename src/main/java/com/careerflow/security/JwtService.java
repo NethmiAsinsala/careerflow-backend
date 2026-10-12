@@ -52,10 +52,15 @@ public class JwtService {
 
     public String issue(Long userId) {
         Instant now = clock.instant();
-        return Jwts.builder().subject(userId.toString()).issuer(issuer)
+        return Jwts.builder().id(java.util.UUID.randomUUID().toString()).subject(userId.toString()).issuer(issuer)
                 .claim("token_use", "access")
                 .issuedAt(Date.from(now)).expiration(Date.from(now.plusSeconds(expirationSeconds)))
                 .signWith(key, Jwts.SIG.HS256).compact();
+    }
+
+    public java.time.Instant expiresAt(String token) {
+        userId(token);
+        return parser.parseSignedClaims(token).getPayload().getExpiration().toInstant();
     }
 
     public Long userId(String token) {

@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
+    private final TokenRevocationService tokens;
     private final AuthService authService;
     private final ApiSecurityErrorHandler errorHandler;
 
@@ -41,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     throw new BadCredentialsException("Invalid bearer header");
                 }
                 Long userId = jwtService.userId(header.substring(7));
+                if (tokens.isRevoked(header.substring(7))) throw new BadCredentialsException("Revoked token");
                 AuthenticatedUser user = authService.authenticatedUser(userId);
                 var authentication = UsernamePasswordAuthenticationToken.authenticated(user, null,
                         List.of(new SimpleGrantedAuthority("ROLE_" + user.role())));

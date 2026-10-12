@@ -35,14 +35,14 @@ public class SavedJobServiceImpl implements SavedJobService {
                 request.getJobId(),
                 request.getJobSeekerId())) {
 
-            throw new RuntimeException("Job is already saved");
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "Job is already saved");
         }
 
         Job job = jobRepository.findById(request.getJobId())
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Job not found"));
 
         JobSeeker jobSeeker = jobSeekerRepository.findById(request.getJobSeekerId())
-                .orElseThrow(() -> new RuntimeException("Job seeker not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Job seeker not found"));
 
         SavedJob savedJob = SavedJob.builder()
                 .job(job)
@@ -70,7 +70,7 @@ public class SavedJobServiceImpl implements SavedJobService {
 
         SavedJob savedJob = savedJobRepository
                 .findByJobIdAndJobSeekerId(jobId, jobSeekerId)
-                .orElseThrow(() -> new RuntimeException("Saved job not found"));
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Saved job not found"));
 
         savedJobRepository.delete(savedJob);
     }

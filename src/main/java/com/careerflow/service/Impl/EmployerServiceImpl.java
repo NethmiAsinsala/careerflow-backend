@@ -31,13 +31,14 @@ public class EmployerServiceImpl implements EmployerService {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found with id: " + request.getUserId()
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "User not found with id: " + request.getUserId()
                         ));
 
+        if (!"EMPLOYER".equals(user.getRole().getName())) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "User must have the EMPLOYER role");
+        }
         if (employerRepository.existsByUserId(request.getUserId())) {
-            throw new RuntimeException(
-                    "Employer already exists for user id: " + request.getUserId()
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "Employer already exists for user id: " + request.getUserId()
             );
         }
 
@@ -68,8 +69,7 @@ public class EmployerServiceImpl implements EmployerService {
 
         Employer employer = employerRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "Employer not found with id: " + id
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Employer not found with id: " + id
                         ));
 
         return employerMapper.toResponse(employer);
@@ -82,8 +82,7 @@ public class EmployerServiceImpl implements EmployerService {
 
         Employer employer = employerRepository.findByUserId(userId)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "Employer not found for user id: " + userId
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Employer not found for user id: " + userId
                         ));
 
         return employerMapper.toResponse(employer);
@@ -95,8 +94,7 @@ public class EmployerServiceImpl implements EmployerService {
 
         Employer employer = employerRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "Employer not found with id: " + id
+                        new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Employer not found with id: " + id
                         ));
 
         employerRepository.delete(employer);
