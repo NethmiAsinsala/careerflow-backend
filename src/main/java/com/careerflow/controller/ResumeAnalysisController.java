@@ -13,4 +13,9 @@ public class ResumeAnalysisController {
     public ResponseEntity<ResumeAnalysisService.Analysis> analyze() {
         return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(analysis.analyze());
     }
+    @PostMapping("/compare/{jobId}")
+    @Operation(summary="Compare your uploaded CV with a job", description="Candidate only. Returns CV skill coverage and job-specific advice; no profile changes or saved analysis.")
+    public ResponseEntity<ResumeAnalysisService.JobAnalysis> compare(@PathVariable Long jobId) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(analysis.compare(jobId));
+    }
 }

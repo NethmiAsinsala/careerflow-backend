@@ -118,3 +118,8 @@ The production profile requires external DB and JWT settings, disables SQL loggi
 ## Operational limits
 
 Resume upload accepts at most 5 MiB and basic PDF markers; analysis performs full text extraction and rejects encrypted/image-only documents, more than 20 pages, or over 30,000 extracted characters. No OCR or malware scanning is included. AI feedback is not stored or applied automatically. One analysis runs per API instance; default model timeout is 120 seconds. Logout revokes one token, not every device. Revoked tokens are retained until expired and removed during subsequent logouts. Suspending an account preserves its data; reactivation restores unexpired, non-revoked tokens.
+
+### Job-specific CV review
+Candidates can call `POST /api/ai/resume/compare/{jobId}` (no body) to compare their own uploaded PDF with an existing job. Response: `analysis` (the existing resume feedback envelope) and `comparison` (job ID/title, percentage, matched/missing skills, required count, explanation). Results are not saved and responses use `Cache-Control: no-store`.
+
+The percentage is listed-skill coverage based on AI-extracted CV skills, using the existing case-insensitive exact skill matcher. It is not hiring likelihood or overall suitability; synonyms may be missed. Jobs without listed skills return a null percentage. Ollama provides job-specific strengths and improvements without updating the profile. The existing general analysis endpoint remains available.
